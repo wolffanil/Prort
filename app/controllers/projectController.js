@@ -7,7 +7,7 @@ exports.getAllProject = async (req, res) => {
     const projects = await Project.find();
 
     res.status(200).json({
-      status: "seccuss",
+      status: "seccess",
       data: {
         projects,
       },
@@ -31,24 +31,32 @@ exports.uploadProjectPhoto = upload.single("photo");
 exports.resizeProjectPhoto = async (req, res, next) => {
   if (!req.file) return next();
 
-  req.file.filename = `project-${req.body.title}-${Date.now()}.jpeg`;
+  req.file.filename = `project-${req.body.title}-${Date.now()}.png`;
 
-  req.body.img = req.file.filename;
+  req.body.image = req.file.filename;
 
   await sharp(req.file.buffer)
     .resize(500, 500) // 500px 500px
-    .toFormat("jpeg") // формат
-    .jpeg({ quality: 90 }) //качество фото - 90 %
-    .toFile(`img/${req.file.filename}`); // куда отправляеем
+    .toFormat("png") // формат
+    .png({ quality: 90 }) //качество фото - 90 %
+    .toFile(`img/projects/${req.file.filename}`); // куда отправляеем
+
+  next();
+};
+
+exports.check = (req, res, next) => {
+  if (req.body.secret !== process.env.SECRET_WORD) {
+    return res.status(400).json({
+      status: "Failed",
+      message: "The secret word is wrong",
+    });
+  }
 
   next();
 };
 
 exports.createProject = async (req, res) => {
   try {
-    if (req.body.secret !== process.env.SECRET_WORD)
-      throw new Error("You dont use it");
-
     await Project.create(req.body);
 
     res.status(200).json({
@@ -57,7 +65,7 @@ exports.createProject = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: "error",
-      message: "Error",
+      message: "Error created",
     });
   }
 };

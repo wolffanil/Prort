@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 
+const tagSchema = new mongoose.Schema({
+  name: String,
+  color: String,
+});
+
 const projectSchema = new mongoose.Schema({
-  title: {
+  name: {
     type: String,
     required: [true, "A title must be"],
   },
@@ -17,13 +22,13 @@ const projectSchema = new mongoose.Schema({
     type: String,
     required: [true, "A link to network must be"],
   },
-  img: {
+  image: {
     type: String,
     required: [true, "A img must be"],
   },
-  tools: {
-    type: String,
-    required: [true, "A tools must be"],
+  tags: {
+    type: [tagSchema],
+    required: [true, "A tags must have"],
   },
 });
 

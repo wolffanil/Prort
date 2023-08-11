@@ -4,6 +4,7 @@ const {
   getAllProject,
   uploadProjectPhoto,
   resizeProjectPhoto,
+  check,
 } = require("../controllers/projectController");
 
 const router = express.Router();
