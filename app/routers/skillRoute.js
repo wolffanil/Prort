@@ -5,7 +5,6 @@ const {
   uploadSkillPhoto,
   resizeSkillPhoto,
 } = require("../controllers/skillContoller");
-const { check } = require("../controllers/projectController");
 
 const router = express.Router();
 
